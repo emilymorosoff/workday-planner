@@ -80,3 +80,4 @@ $(document).ready(function() {
     updateCurrentDayDisplay();
 });
 
+$('#alert-box').fadeIn().delay(3000).fadeOut();
