@@ -22,3 +22,13 @@ function updateTimeBlockColors() {
 $(document).ready(function() {
   updateTimeBlockColors();
 });
+
+function saveEvent(hour, eventData) {
+  localStorage.setItem('event-' + hour, eventData);
+}
+
+$(document).on('click', '.save-btn', function() {
+  var hour = $(this).closest('.time-block').data('hour');
+  var eventData = $(this).siblings('.event-input').val();
+  saveEvent(hour, eventData);
+});
