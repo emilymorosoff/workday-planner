@@ -27,6 +27,17 @@ textarea {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }
 
+/* Basic color-coding for past, present, and future */
+.past {
+  background-color: #d3d3d3; 
+}
+.present {
+  background-color: #ff6961; 
+}
+.future {
+  background-color: #77dd77; 
+}
+
 
 .row {
   border-top: 1px solid white;
