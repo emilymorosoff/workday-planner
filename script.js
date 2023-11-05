@@ -1,9 +1,6 @@
 $(document).ready(function() {
-    var allPast = false; 
-    var allFuture = false; 
     var currentDay = dayjs();
     var selectedDay = currentDay;
-    var arrowClicked = false;
 
     function updateCurrentDayDisplay() {
         $('#currentDay').text(selectedDay.format('dddd, MMMM D'));
@@ -16,12 +13,6 @@ $(document).ready(function() {
         $('.time-block').each(function() {
             var blockHour = parseInt($(this).attr('id').replace('hour-', ''));
             $(this).removeClass('past present future');
-    
-            if (allPast) {
-                $(this).addClass('past');
-            } else if (allFuture) {
-                $(this).addClass('future');
-            } else {
 
                 if (selectedDay.isSame(now, 'day')) {
                     if (blockHour < now.hour()) {
@@ -36,7 +27,6 @@ $(document).ready(function() {
                 } else if (selectedDay.isAfter(now, 'day')) {
                     $(this).addClass('future');
                 }
-            }
         });
     }
     
@@ -72,15 +62,11 @@ $(document).ready(function() {
     
     $('#leftArrow').click(function() {
         selectedDay = selectedDay.subtract(1, 'day');
-        allPast = !selectedDay.isSame(dayjs(), 'day');
-        allFuture = false;
         updateCurrentDayDisplay();
     });
     
     $('#rightArrow').click(function() {
         selectedDay = selectedDay.add(1, 'day');
-        allFuture = !selectedDay.isSame(dayjs(), 'day');
-        allPast = false;
         updateCurrentDayDisplay();
     });
 
