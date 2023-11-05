@@ -1,42 +1,82 @@
 $(document).ready(function() {
-  var today = moment().format('dddd, MMMM Do');
-  $('#currentDay').text(today);
+    var allPast = false; 
+    var allFuture = false; 
+    var currentDay = dayjs();
+    var selectedDay = currentDay;
+    var arrowClicked = false;
 
-  function updateTimeBlockColors() {
-      var currentHour = moment().hour(); 
-      $('.time-block').each(function() {
-          var blockHour = parseInt($(this).data('hour'));
-          if (blockHour < currentHour) {
-              $(this).addClass('past').removeClass('present future');
-          } else if (blockHour === currentHour) {
-              $(this).addClass('present').removeClass('past future');
-          } else {
-              $(this).addClass('future').removeClass('past present');
-          }
-      });
-  }
+    function updateCurrentDayDisplay() {
+        $('#currentDay').text(selectedDay.format('dddd, MMMM D'));
+        updateTimeBlockClasses();
+        loadSavedData();
+    }
 
-  updateTimeBlockColors();
+    function updateTimeBlockClasses() {
+        var now = dayjs();
+        $('.time-block').each(function() {
+            var blockHour = parseInt($(this).attr('id').replace('hour-', ''));
+            $(this).removeClass('past present future');
+    
+            if (allPast) {
+                $(this).addClass('past');
+            } else if (allFuture) {
+                $(this).addClass('future');
+            } else {
 
-  function saveEvent(hour, eventData) {
-      localStorage.setItem('event-' + hour, eventData);
-  }
+                if (selectedDay.isSame(now, 'day')) {
+                    if (blockHour < now.hour()) {
+                        $(this).addClass('past');
+                    } else if (blockHour === now.hour()) {
+                        $(this).addClass('present');
+                    } else {
+                        $(this).addClass('future');
+                    }
+                } else if (selectedDay.isBefore(now, 'day')) {
+                    $(this).addClass('past');
+                } else if (selectedDay.isAfter(now, 'day')) {
+                    $(this).addClass('future');
+                }
+            }
+        });
+    }
+    
+    function saveData(hourId, data) {
+        localStorage.setItem(selectedDay.format('YYYY-MM-DD') + '-' + hourId, data);
+    }
 
-  function loadSavedEvents() {
-      $('.time-block').each(function() {
-          var hour = $(this).data('hour');
-          var savedEvent = localStorage.getItem('event-' + hour);
-          if (savedEvent) {
-              $(this).find('.event-input').val(savedEvent);
-          }
-      });
-  }
+    $('.saveBtn').click(function() {
+        var hourId = $(this).closest('.time-block').attr('id');
+        var data = $(this).siblings('.description').val();
+        saveData(hourId, data);
+    });
 
-  loadSavedEvents();
+    function loadSavedData() {
+        var date = selectedDay.format('YYYY-MM-DD');
+        $('.time-block').each(function() {
+            var hourId = $(this).attr('id');
+            var savedData = localStorage.getItem(date + '-' + hourId);
+            if (savedData) {
+                $(this).find('.description').val(savedData);
+            } else {
+                $(this).find('.description').val('');
+            }
+        });
+    }
 
-  $(document).on('click', '.save-btn', function() {
-      var hour = $(this).closest('.time-block').data('hour');
-      var eventData = $(this).siblings('.event-input').val();
-      saveEvent(hour, eventData);
-  });
+    $('#leftArrow').click(function() {
+        selectedDay = selectedDay.subtract(1, 'day');
+        allPast = !selectedDay.isSame(dayjs(), 'day');
+        allFuture = false;
+        updateCurrentDayDisplay();
+    });
+    
+    $('#rightArrow').click(function() {
+        selectedDay = selectedDay.add(1, 'day');
+        allFuture = !selectedDay.isSame(dayjs(), 'day');
+        allPast = false;
+        updateCurrentDayDisplay();
+    });
+
+    updateCurrentDayDisplay();
 });
+
