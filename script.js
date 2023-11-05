@@ -62,7 +62,14 @@ $(document).ready(function() {
             }
         });
     }
-
+    $('.saveBtn').click(function() {
+        var hourId = $(this).closest('.time-block').attr('id');
+        var data = $(this).siblings('.description').val();
+        saveData(hourId, data);
+        
+        $('#alert-box').show().delay(5000).fadeOut();
+    });
+    
     $('#leftArrow').click(function() {
         selectedDay = selectedDay.subtract(1, 'day');
         allPast = !selectedDay.isSame(dayjs(), 'day');
@@ -79,5 +86,3 @@ $(document).ready(function() {
 
     updateCurrentDayDisplay();
 });
-
-$('#alert-box').fadeIn().delay(3000).fadeOut();
