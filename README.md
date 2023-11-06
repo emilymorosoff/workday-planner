@@ -1,6 +1,6 @@
 # Web Calendar Application
 
-![Web Calendar App Mockup](https://github.com/emilymorosoff/workday-planner/blob/b8942504e713ce8746c670b4b46c62ceacbf4cf8/mockup-image.png)
+![Web Calendar App Mockup](https://github.com/emilymorosoff/workday-planner/blob/2c43d7bd261b4e8c244f45cf5dfa2fce8536988b/mockup-image.png)
 
 ## 🌟 Welcome to the Web Calendar Application 🌟
 
